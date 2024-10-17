@@ -4,9 +4,15 @@ from queue import LifoQueue
 treeStack = LifoQueue()
 
 programSymbols = ["<let-in-end>", "{<let-in-end>}"]
-letInEndSymbols = ["let", "<decl-list>", "in", "<type>", "(<expr>)", "end"]
+letInEndSymbols = ["let", "<decl-list>", "in", "<type>", "(", "<expr>", ")" "end"]
 declListSymbols = ["<decl>", "{<decl>}"]
-
+declSymbols = ["id", ":", "<type>", "=", "<expr>", ";"]
+typeSymbols = ["int", "real"]
+exprSymbol = ["<term>", "+", "-", "<term>", "if", "<cond>", "then", "<expr>", "else", "<expr>"]
+termSymbols= ["<factor>", "*", "/", "<factor>"]
+factorSymbols = ["(", "<expr>", ")", "id", "number", "<type>", "(", "id", ")"]
+conditionSymbols = ["<oprnd>", "<", "<=", ">", ">=", "==", "<>", "<oprnd>"]
+operandSymbols = ["id", "num"]
 
 def Oprnd(line: str):
     return True
@@ -46,12 +52,18 @@ def LetInEnd(line: str):
                 match (letInEndSymbols[symbolIndex]):  
                     case "<decl-list>":
                         canContinue = DeclList(line, index)
-                        
                         if not canContinue:
                             return False
                         break
                     case "<type>":
-                        canContinue = Type(line[index])
+                        canContinue = Type(line, index)
+                        if not canContinue:
+                            return False
+                        break
+                    case "<expr>":
+                        canContinue = Type(line, index)
+                        if not canContinue:
+                            return False
             symbolIndex+=1     
     return True
 
